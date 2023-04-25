@@ -1,4 +1,4 @@
-import { Input } from "../../components/Form/Input";
+import { InputForm } from "../../components/Form/InputForm";
 import { Button } from "../../components/Form/Button";
 import {
   Container,
@@ -13,8 +13,14 @@ import { useState } from "react";
 import { Modal } from "react-native";
 import { CategorySelectButton } from "../../components/Form/CategorySelectButton";
 import { Category, CategorySelect } from "../CategorySelect";
+import { useForm } from "react-hook-form";
 
 type TransactionType = "up" | "down";
+
+interface FormData {
+  name: string;
+  amount: string;
+}
 
 export function Register() {
   const [transactionType, setTransactionType] = useState("" as TransactionType);
@@ -23,6 +29,13 @@ export function Register() {
     key: "category",
     name: "category",
   } as Category);
+
+  const { control, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      amount: "",
+      name: "",
+    },
+  });
 
   function handleTransactionType(type: TransactionType) {
     setTransactionType(type);
@@ -40,6 +53,10 @@ export function Register() {
     setCategory(category);
   }
 
+  function onSubmit(data: FormData) {
+    console.log({ data });
+  }
+
   return (
     <Container>
       <Header>
@@ -48,8 +65,20 @@ export function Register() {
 
       <Form>
         <Fields>
-          <Input placeholder="Nome" />
-          <Input placeholder="E-mail" />
+          <InputForm
+            placeholder="Nome"
+            name="name"
+            control={control}
+            autoCapitalize="sentences"
+            autoCorrect={false}
+          />
+
+          <InputForm
+            placeholder="Preço"
+            control={control}
+            name="amount"
+            keyboardType="numeric"
+          />
 
           <TransactionTypes>
             <TransactionTypeButton
@@ -72,7 +101,7 @@ export function Register() {
           />
         </Fields>
 
-        <Button title="Enviar" />
+        <Button title="Enviar" onPress={handleSubmit(onSubmit)} />
       </Form>
 
       <Modal visible={categoryModalOpen}>
