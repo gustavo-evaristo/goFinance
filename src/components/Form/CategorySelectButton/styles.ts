@@ -16,10 +16,10 @@ export const Container = styled.TouchableOpacity.attrs({
 
 export const Category = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular};
-  font-size: ${RFValue(14)};
+  font-size: ${RFValue(14)}px;
 `;
 
 export const Icon = styled(Feather)`
-  font-size: ${RFValue(20)};
+  font-size: ${RFValue(20)}px;
   color: ${({ theme }) => theme.colors.text};
 `;
