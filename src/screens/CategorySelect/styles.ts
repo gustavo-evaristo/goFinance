@@ -2,6 +2,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { getBottomSpace } from "react-native-iphone-x-helper";
+import { RectButton } from "react-native-gesture-handler";
 
 interface CategoryProps {
   isActive: boolean;
@@ -31,7 +32,7 @@ export const Title = styled.Text`
   font-size: ${RFValue(18)}px;
 `;
 
-export const Category = styled.TouchableOpacity.attrs({
+export const Category = styled(RectButton).attrs({
   activeOpacity: 0.8,
 })<CategoryProps>`
   width: 100%;
