@@ -1,15 +1,16 @@
+import "intl";
+import "intl/locale-data/jsonp/pt-BR";
 import { ThemeProvider } from "styled-components";
 import theme from "./src/global/styles/theme";
 import { AppRoutes } from "./src/routes/app.routes";
-
+import { NavigationContainer } from "@react-navigation/native";
+import { TransactionProvider } from "./src/context/TransactionContext";
 import {
   Poppins_400Regular,
   Poppins_500Medium,
   Poppins_700Bold,
   useFonts,
 } from "@expo-google-fonts/poppins";
-import { Register } from "./src/screens/Register";
-import { NavigationContainer } from "@react-navigation/native";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -24,9 +25,11 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <AppRoutes />
-      </NavigationContainer>
+      <TransactionProvider>
+        <NavigationContainer>
+          <AppRoutes />
+        </NavigationContainer>
+      </TransactionProvider>
     </ThemeProvider>
   );
 }

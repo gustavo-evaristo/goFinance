@@ -33,7 +33,7 @@ export function AppRoutes() {
       />
 
       <Screen
-        name="registrar"
+        name="Registrar"
         component={Register}
         options={{
           tabBarIcon: ({ color, size }) => (

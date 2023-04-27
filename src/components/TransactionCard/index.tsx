@@ -1,3 +1,5 @@
+import { TransactionProps } from "../../context/TransactionContext";
+import { categories } from "../../utils/categories";
 import {
   Container,
   Title,
@@ -9,33 +11,16 @@ import {
   Date,
 } from "./styles";
 
-interface Category {
-  name: string;
-  icon: string;
-}
+export function TransactionCard(data: TransactionProps) {
+  const category = categories.find((item) => item.key === data.category);
 
-export interface TransactionCardProps {
-  type: "positive" | "negative";
-  title: string;
-  amount: string;
-  category: Category;
-  date: string;
-}
-
-export function TransactionCard({
-  amount,
-  category,
-  date,
-  title,
-  type,
-}: TransactionCardProps) {
   return (
     <Container>
-      <Title>{title}</Title>
+      <Title>{data.name}</Title>
 
-      <Amount type={type}>
-        {type === "negative" && "- "}
-        {amount}
+      <Amount type={data.type}>
+        {data.type === "negative" && "- "}
+        {data.amount}
       </Amount>
 
       <Footer>
@@ -43,7 +28,7 @@ export function TransactionCard({
           <Icon name={category.icon} />
           <CategoryName>{category.name}</CategoryName>
         </Category>
-        <Date>{date}</Date>
+        <Date>{data.date}</Date>
       </Footer>
     </Container>
   );

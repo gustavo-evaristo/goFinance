@@ -16,6 +16,9 @@ import { Category, CategorySelect } from "../CategorySelect";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import uuid from "react-native-uuid";
+import { useNavigation } from "@react-navigation/native";
+import { useTransaction } from "../../context/TransactionContext";
 
 type TransactionType = "up" | "down";
 
@@ -37,12 +40,15 @@ export function Register() {
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [category, setCategory] = useState({
     key: "category",
-    name: "category",
+    name: "Categoria",
   } as Category);
+
+  const { registerTransaction } = useTransaction();
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -51,6 +57,8 @@ export function Register() {
       name: "",
     },
   });
+
+  const { navigate } = useNavigation();
 
   function handleTransactionType(type: TransactionType) {
     setTransactionType(type);
@@ -68,7 +76,28 @@ export function Register() {
     setCategory(category);
   }
 
-  function onSubmit({ amount, name }: FormData) {}
+  async function onSubmit({ amount, name }: FormData) {
+    try {
+      registerTransaction({
+        id: String(uuid.v4()),
+        amount,
+        name,
+        type: transactionType,
+        category: category.key,
+        date: new Date(),
+      });
+
+      setTransactionType("" as TransactionType);
+
+      setCategory({ key: "category", name: "Categoria" });
+
+      reset();
+
+      navigate("Listagem");
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
