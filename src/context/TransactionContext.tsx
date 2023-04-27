@@ -24,6 +24,9 @@ interface TransactionContextData {
   transactions: TransactionProps[];
   setTransactions: (transactions: TransactionProps[]) => void;
   registerTransaction: (transaction: TransactionProps) => void;
+  transactionIncome: number;
+  transactionOutcome: number;
+  amountTransactions: number;
 }
 
 const TransactionContext = createContext({} as TransactionContextData);
@@ -66,6 +69,26 @@ const TransactionProvider = ({ children }: TransactionContextProvider) => {
     })
     .reverse();
 
+  const transactionIncome = Number(
+    transactions.reduce((acc, item) => {
+      if (item.type === "up") {
+        return acc + item.amount;
+      }
+
+      return acc;
+    }, 0)
+  );
+
+  const transactionOutcome = +transactions.reduce((acc, item) => {
+    if (item.type === "down") {
+      return acc + item.amount;
+    }
+
+    return acc;
+  }, 0);
+
+  const amountTransactions = transactionIncome - transactionOutcome;
+
   async function getStorageTransactions() {
     const response = await AsyncStorage.getItem(key);
 
@@ -84,6 +107,9 @@ const TransactionProvider = ({ children }: TransactionContextProvider) => {
         transactions: formattedTransactions,
         setTransactions,
         registerTransaction,
+        transactionIncome,
+        transactionOutcome,
+        amountTransactions,
       }}
     >
       {children}

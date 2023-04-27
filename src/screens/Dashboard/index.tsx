@@ -21,7 +21,12 @@ import {
 } from "./styles";
 
 export function Dashboard() {
-  const { transactions } = useTransaction();
+  const {
+    transactions,
+    transactionIncome,
+    transactionOutcome,
+    amountTransactions,
+  } = useTransaction();
 
   return (
     <Container>
@@ -45,21 +50,21 @@ export function Dashboard() {
       <HighlightCards>
         <HighlightCard
           title="Entradas"
-          amount="R$ 7.300,00"
+          amount={transactionIncome}
           lastTransaction="Última entrada dia 14 de abril"
           type="up"
         />
 
         <HighlightCard
           title="Saídas"
-          amount="R$ 3.050,00"
+          amount={transactionOutcome}
           lastTransaction="Última saída dia 08 de abril"
           type="down"
         />
 
         <HighlightCard
           title="Total"
-          amount="R$ 4.250,00"
+          amount={amountTransactions}
           lastTransaction="01 à 19 de abril"
           type="total"
         />

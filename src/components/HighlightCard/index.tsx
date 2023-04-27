@@ -10,7 +10,7 @@ import {
 
 interface Props {
   title: string;
-  amount: string;
+  amount: number;
   lastTransaction: string;
   type: "up" | "down" | "total";
 }
@@ -22,6 +22,11 @@ export function HighlightCard({ title, amount, lastTransaction, type }: Props) {
     total: "dollar-sign",
   };
 
+  const formattedAmount = amount.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "brl",
+  });
+
   return (
     <Container type={type}>
       <Header>
@@ -30,7 +35,7 @@ export function HighlightCard({ title, amount, lastTransaction, type }: Props) {
       </Header>
 
       <Footer>
-        <Amount type={type}>{amount}</Amount>
+        <Amount type={type}>{formattedAmount}</Amount>
         <LastTransaction type={type}>{lastTransaction}</LastTransaction>
       </Footer>
     </Container>
