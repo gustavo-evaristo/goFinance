@@ -1,13 +1,6 @@
 import { InputForm } from "../../components/Form/InputForm";
 import { Button } from "../../components/Form/Button";
-import {
-  Container,
-  Header,
-  Title,
-  Form,
-  Fields,
-  TransactionTypes,
-} from "./styles";
+import { Container, Form, Fields, TransactionTypes } from "./styles";
 import { TransactionTypeButton } from "../../components/Form/TransactionTypeButton";
 import { useState } from "react";
 import { Keyboard, Modal, TouchableWithoutFeedback } from "react-native";
@@ -19,6 +12,7 @@ import * as Yup from "yup";
 import uuid from "react-native-uuid";
 import { useNavigation } from "@react-navigation/native";
 import { useTransaction } from "../../context/TransactionContext";
+import { Header } from "../../components/Header";
 
 type TransactionType = "up" | "down";
 
@@ -98,9 +92,7 @@ export function Register() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container>
-        <Header>
-          <Title>Cadastro</Title>
-        </Header>
+        <Header title="Registrar" />
 
         <Form>
           <Fields>

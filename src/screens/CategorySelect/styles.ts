@@ -14,24 +14,6 @@ export const Container = styled.View`
   align-items: center;
 `;
 
-export const Header = styled.View`
-  width: 100%;
-  height: ${RFValue(113)}px;
-
-  background-color: ${({ theme }) => theme.colors.primary};
-
-  align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 19px;
-`;
-
-export const Title = styled.Text`
-  color: ${({ theme }) => theme.colors.shape};
-
-  font-family: ${({ theme }) => theme.fonts.regular};
-  font-size: ${RFValue(18)}px;
-`;
-
 export const Category = styled(RectButton).attrs({
   activeOpacity: 0.8,
 })<CategoryProps>`

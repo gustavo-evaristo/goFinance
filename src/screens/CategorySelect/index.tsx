@@ -1,16 +1,8 @@
 import { FlatList } from "react-native";
-import {
-  Container,
-  Header,
-  Title,
-  Category,
-  Icon,
-  Name,
-  Separator,
-  Footer,
-} from "./styles";
+import { Container, Category, Icon, Name, Separator, Footer } from "./styles";
 import { categories } from "../../utils/categories";
 import { Button } from "../../components/Form/Button";
+import { Header } from "../../components/Header";
 
 export interface Category {
   key: string;
@@ -30,9 +22,7 @@ export function CategorySelect({
 }: Props) {
   return (
     <Container>
-      <Header>
-        <Title>Categoria</Title>
-      </Header>
+      <Header title="Categoria" />
 
       <FlatList
         data={categories}
