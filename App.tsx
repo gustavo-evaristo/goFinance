@@ -11,6 +11,7 @@ import {
   Poppins_700Bold,
   useFonts,
 } from "@expo-google-fonts/poppins";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -27,6 +28,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <TransactionProvider>
         <NavigationContainer>
+          <StatusBar style="light" translucent />
           <AppRoutes />
         </NavigationContainer>
       </TransactionProvider>

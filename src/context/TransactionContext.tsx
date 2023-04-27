@@ -26,7 +26,7 @@ interface TransactionContextData {
   registerTransaction: (transaction: TransactionProps) => void;
   transactionIncome: number;
   transactionOutcome: number;
-  amountTransactions: number;
+  transactionsResume: number;
 }
 
 const TransactionContext = createContext({} as TransactionContextData);
@@ -87,7 +87,7 @@ const TransactionProvider = ({ children }: TransactionContextProvider) => {
     return acc;
   }, 0);
 
-  const amountTransactions = transactionIncome - transactionOutcome;
+  const transactionsResume = transactionIncome - transactionOutcome;
 
   async function getStorageTransactions() {
     const response = await AsyncStorage.getItem(key);
@@ -109,7 +109,7 @@ const TransactionProvider = ({ children }: TransactionContextProvider) => {
         registerTransaction,
         transactionIncome,
         transactionOutcome,
-        amountTransactions,
+        transactionsResume,
       }}
     >
       {children}

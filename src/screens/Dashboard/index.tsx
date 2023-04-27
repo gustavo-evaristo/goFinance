@@ -25,7 +25,7 @@ export function Dashboard() {
     transactions,
     transactionIncome,
     transactionOutcome,
-    amountTransactions,
+    transactionsResume,
   } = useTransaction();
 
   return (
@@ -64,7 +64,7 @@ export function Dashboard() {
 
         <HighlightCard
           title="Total"
-          amount={amountTransactions}
+          amount={transactionsResume}
           lastTransaction="01 à 19 de abril"
           type="total"
         />
