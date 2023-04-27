@@ -27,6 +27,13 @@ export function HighlightCard({ title, amount, lastTransaction, type }: Props) {
     currency: "brl",
   });
 
+  const transactionDateText =
+    type === "up"
+      ? "Última entrada dia"
+      : type === "down"
+      ? "Última saída dia"
+      : "";
+
   return (
     <Container type={type}>
       <Header>
@@ -36,7 +43,9 @@ export function HighlightCard({ title, amount, lastTransaction, type }: Props) {
 
       <Footer>
         <Amount type={type}>{formattedAmount}</Amount>
-        <LastTransaction type={type}>{lastTransaction}</LastTransaction>
+        <LastTransaction
+          type={type}
+        >{`${transactionDateText} ${lastTransaction}`}</LastTransaction>
       </Footer>
     </Container>
   );

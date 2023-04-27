@@ -22,11 +22,15 @@ export interface TransactionProps {
 
 interface TransactionContextData {
   transactions: TransactionProps[];
+  formattedTransactions: TransactionProps[];
   setTransactions: (transactions: TransactionProps[]) => void;
   registerTransaction: (transaction: TransactionProps) => void;
   transactionIncome: number;
   transactionOutcome: number;
   transactionsResume: number;
+  lastIcome: string;
+  lastOutcome: string;
+  incomeRange: string;
 }
 
 const TransactionContext = createContext({} as TransactionContextData);
@@ -48,46 +52,18 @@ const TransactionProvider = ({ children }: TransactionContextProvider) => {
     }
   }
 
-  const formattedTransactions = transactions
-    .map((transaction: TransactionProps) => {
-      const amount = Number(transaction?.amount)?.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "brl",
-      });
+  const firstTransactionDate = Intl.DateTimeFormat("pt-BR", {
+    day: "numeric",
+  }).format(new Date(transactions[0]?.date || new Date()));
 
-      const date = Intl.DateTimeFormat("pt-BR", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "2-digit",
-      }).format(new Date(transaction?.date));
-
-      return {
-        ...transaction,
-        amount,
-        date,
-      };
-    })
-    .reverse();
-
-  const transactionIncome = Number(
-    transactions.reduce((acc, item) => {
-      if (item.type === "up") {
-        return acc + item.amount;
-      }
-
-      return acc;
-    }, 0)
+  const lastTransactionDate = Intl.DateTimeFormat("pt-BR", {
+    day: "numeric",
+    month: "long",
+  }).format(
+    new Date(transactions[transactions?.length - 1]?.date || new Date())
   );
 
-  const transactionOutcome = +transactions.reduce((acc, item) => {
-    if (item.type === "down") {
-      return acc + item.amount;
-    }
-
-    return acc;
-  }, 0);
-
-  const transactionsResume = transactionIncome - transactionOutcome;
+  const incomeRange = `${firstTransactionDate} à ${lastTransactionDate}`;
 
   async function getStorageTransactions() {
     const response = await AsyncStorage.getItem(key);
@@ -101,15 +77,82 @@ const TransactionProvider = ({ children }: TransactionContextProvider) => {
     getStorageTransactions();
   }, []);
 
+  const formattedTransactions = transactions
+    .map((transaction: TransactionProps) => {
+      const amount = Number(transaction?.amount)?.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "brl",
+      });
+
+      const date = Intl.DateTimeFormat("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+      }).format(new Date(transaction?.date || new Date()));
+
+      return {
+        ...transaction,
+        amount,
+        date,
+      };
+    })
+    .reverse();
+
+  const transactionIncome = Number(
+    transactions.reduce((acc, item) => {
+      if (item?.type === "up") {
+        return acc + item?.amount;
+      }
+
+      return acc;
+    }, 0)
+  );
+
+  const transactionOutcome = +transactions.reduce((acc, item) => {
+    if (item?.type === "down") {
+      return acc + item?.amount;
+    }
+
+    return acc;
+  }, 0);
+
+  const transactionsResume = transactionIncome - transactionOutcome;
+
+  const lastIcome = Intl.DateTimeFormat("pt-BR", {
+    day: "numeric",
+    month: "long",
+  }).format(
+    new Date(
+      transactions
+        .filter((transaction) => transaction.type === "up")
+        .reverse()[0]?.date || new Date()
+    )
+  );
+
+  const lastOutcome = Intl.DateTimeFormat("pt-BR", {
+    day: "numeric",
+    month: "long",
+  }).format(
+    new Date(
+      transactions
+        .filter((transaction) => transaction.type === "down")
+        .reverse()[0]?.date || new Date()
+    )
+  );
+
   return (
     <TransactionContext.Provider
       value={{
-        transactions: formattedTransactions,
+        transactions,
+        formattedTransactions,
         setTransactions,
         registerTransaction,
         transactionIncome,
         transactionOutcome,
         transactionsResume,
+        lastIcome,
+        lastOutcome,
+        incomeRange,
       }}
     >
       {children}

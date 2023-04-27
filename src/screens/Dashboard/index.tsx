@@ -22,10 +22,13 @@ import {
 
 export function Dashboard() {
   const {
-    transactions,
+    formattedTransactions,
     transactionIncome,
     transactionOutcome,
     transactionsResume,
+    lastIcome,
+    lastOutcome,
+    incomeRange,
   } = useTransaction();
 
   return (
@@ -51,21 +54,21 @@ export function Dashboard() {
         <HighlightCard
           title="Entradas"
           amount={transactionIncome}
-          lastTransaction="Última entrada dia 14 de abril"
+          lastTransaction={lastIcome}
           type="up"
         />
 
         <HighlightCard
           title="Saídas"
           amount={transactionOutcome}
-          lastTransaction="Última saída dia 08 de abril"
+          lastTransaction={lastOutcome}
           type="down"
         />
 
         <HighlightCard
           title="Total"
           amount={transactionsResume}
-          lastTransaction="01 à 19 de abril"
+          lastTransaction={incomeRange}
           type="total"
         />
       </HighlightCards>
@@ -74,7 +77,7 @@ export function Dashboard() {
         <Title>Listagem</Title>
 
         <TransactionsList
-          data={transactions}
+          data={formattedTransactions}
           keyExtractor={(_, index) => index.toString()}
           renderItem={({ item }) => (
             <TransactionCard {...(item as TransactionProps)} />
