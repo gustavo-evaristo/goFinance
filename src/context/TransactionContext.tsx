@@ -34,11 +34,15 @@ const TransactionProvider = ({ children }: TransactionContextProvider) => {
   const key = "@goFinance:transactions";
 
   async function registerTransaction(newTransaction: TransactionProps) {
-    setTransactions((state) => [...state, newTransaction]);
+    try {
+      setTransactions((state) => [...state, newTransaction]);
 
-    const newData = [...transactions, newTransaction];
+      const newData = [...transactions, newTransaction];
 
-    await AsyncStorage.setItem(key, JSON.stringify(newData));
+      await AsyncStorage.setItem(key, JSON.stringify(newData));
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   const formattedTransactions = transactions

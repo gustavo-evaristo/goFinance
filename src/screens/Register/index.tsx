@@ -77,26 +77,22 @@ export function Register() {
   }
 
   async function onSubmit({ amount, name }: FormData) {
-    try {
-      registerTransaction({
-        id: String(uuid.v4()),
-        amount,
-        name,
-        type: transactionType,
-        category: category.key,
-        date: new Date(),
-      });
+    registerTransaction({
+      id: String(uuid.v4()),
+      amount,
+      name,
+      type: transactionType,
+      category: category.key,
+      date: new Date(),
+    });
 
-      setTransactionType("" as TransactionType);
+    setTransactionType("" as TransactionType);
 
-      setCategory({ key: "category", name: "Categoria" });
+    setCategory({ key: "category", name: "Categoria" });
 
-      reset();
+    reset();
 
-      navigate("Listagem");
-    } catch (err) {
-      console.error(err);
-    }
+    navigate("Listagem");
   }
 
   return (
