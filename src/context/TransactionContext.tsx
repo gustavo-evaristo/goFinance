@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import { categories } from "../utils/categories";
+import { formatCurrency } from "../utils/formatMoney";
 
 interface TransactionContextProvider {
   children: ReactNode;
@@ -23,7 +24,7 @@ export interface TransactionProps {
 
 export interface AmountByCategory {
   name: string;
-  amount: string;
+  amount: number;
   color: string;
 }
 
@@ -73,24 +74,9 @@ const TransactionProvider = ({ children }: TransactionContextProvider) => {
 
   const incomeRange = `${firstTransactionDate} à ${lastTransactionDate}`;
 
-  async function getStorageTransactions() {
-    const response = await AsyncStorage.getItem(key);
-
-    const transactions = JSON.parse(response) || [];
-
-    setTransactions(transactions);
-  }
-
-  useEffect(() => {
-    getStorageTransactions();
-  }, []);
-
   const formattedTransactions = transactions
     .map((transaction: TransactionProps) => {
-      const amount = Number(transaction?.amount)?.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "brl",
-      });
+      const amount = formatCurrency(transaction?.amount);
 
       const date = Intl.DateTimeFormat("pt-BR", {
         day: "2-digit",
@@ -148,23 +134,34 @@ const TransactionProvider = ({ children }: TransactionContextProvider) => {
     )
   );
 
-  const amountByCategory = categories.map((category) => {
-    const amount = transactions.reduce((acc, item) => {
-      if (item.category === category.key) {
-        return acc + item.amount;
-      }
-      return acc;
-    }, 0);
+  const amountByCategory = categories
+    .map((category) => {
+      const amount = +transactions.reduce((acc, item) => {
+        if (item.category === category.key) {
+          return acc + item.amount;
+        }
+        return acc;
+      }, 0);
 
-    return {
-      name: category.name,
-      color: category.color,
-      amount: Number(amount)?.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "brl",
-      }),
-    };
-  });
+      return {
+        name: category.name,
+        color: category.color,
+        amount,
+      };
+    })
+    .filter((category) => category.amount > 0);
+
+  async function getStorageTransactions() {
+    const response = await AsyncStorage.getItem(key);
+
+    const transactions = JSON.parse(response) || [];
+
+    setTransactions(transactions);
+  }
+
+  useEffect(() => {
+    getStorageTransactions();
+  }, []);
 
   return (
     <TransactionContext.Provider

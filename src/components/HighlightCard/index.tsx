@@ -1,3 +1,4 @@
+import { formatCurrency } from "../../utils/formatMoney";
 import {
   Amount,
   Container,
@@ -22,11 +23,6 @@ export function HighlightCard({ title, amount, lastTransaction, type }: Props) {
     total: "dollar-sign",
   };
 
-  const formattedAmount = amount.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "brl",
-  });
-
   const transactionDateText =
     type === "up"
       ? "Última entrada dia"
@@ -42,7 +38,7 @@ export function HighlightCard({ title, amount, lastTransaction, type }: Props) {
       </Header>
 
       <Footer>
-        <Amount type={type}>{formattedAmount}</Amount>
+        <Amount type={type}>{formatCurrency(amount)}</Amount>
         <LastTransaction
           type={type}
         >{`${transactionDateText} ${lastTransaction}`}</LastTransaction>
