@@ -12,6 +12,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/poppins";
 import { StatusBar } from "expo-status-bar";
+import { Login } from "./src/screens/Login";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -29,7 +30,8 @@ export default function App() {
       <TransactionProvider>
         <NavigationContainer>
           <StatusBar style="light" translucent />
-          <AppRoutes />
+          <Login />
+          {/* <AppRoutes /> */}
         </NavigationContainer>
       </TransactionProvider>
     </ThemeProvider>
