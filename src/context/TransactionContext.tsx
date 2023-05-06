@@ -22,12 +22,6 @@ export interface TransactionProps {
   date: string | Date;
 }
 
-export interface AmountByCategory {
-  name: string;
-  amount: number;
-  color: string;
-}
-
 interface TransactionContextData {
   transactions: TransactionProps[];
   formattedTransactions: TransactionProps[];
@@ -39,7 +33,6 @@ interface TransactionContextData {
   lastIcome: string;
   lastOutcome: string;
   incomeRange: string;
-  amountByCategory: AmountByCategory[];
 }
 
 const TransactionContext = createContext({} as TransactionContextData);
@@ -134,23 +127,6 @@ const TransactionProvider = ({ children }: TransactionContextProvider) => {
     )
   );
 
-  const amountByCategory = categories
-    .map((category) => {
-      const amount = +transactions.reduce((acc, item) => {
-        if (item.category === category.key) {
-          return acc + item.amount;
-        }
-        return acc;
-      }, 0);
-
-      return {
-        name: category.name,
-        color: category.color,
-        amount,
-      };
-    })
-    .filter((category) => category.amount > 0);
-
   async function getStorageTransactions() {
     const response = await AsyncStorage.getItem(key);
 
@@ -176,7 +152,6 @@ const TransactionProvider = ({ children }: TransactionContextProvider) => {
         lastIcome,
         lastOutcome,
         incomeRange,
-        amountByCategory,
       }}
     >
       {children}
